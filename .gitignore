@@ -1,0 +1,25 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+
+# Data files
+*.xlsx
+*.xls
+*.csv
+
+# Documents
+*.docx
+*.doc
+*.pdf
+
+# Docker (not needed for Streamlit Cloud)
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Assets directory
+assets/
+
+# OS
+.DS_Store
