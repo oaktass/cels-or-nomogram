@@ -28,7 +28,7 @@ def create_score_gauge(total_score: int, max_score: int, risk_category: str) -> 
         mode="gauge+number",
         value=total_score,
         number={"font": {"size": 44, "color": BLACK, "family": FONT}},
-        title={"text": "CELS-OR Score", "font": {"size": 13, "color": GREY, "family": FONT}},
+        title={"text": "OR Conversion Score", "font": {"size": 13, "color": GREY, "family": FONT}},
         gauge={
             "axis": {
                 "range": [0, max_score],
@@ -152,7 +152,7 @@ def create_nomogram_axis(total_score: int, probability: float, risk_category: st
     fig.update_layout(
         height=300, margin=dict(t=25, b=45, l=50, r=15),
         xaxis=dict(
-            title=dict(text="CELS-OR Score", font=dict(size=11, color=GREY)),
+            title=dict(text="OR Conversion Score", font=dict(size=11, color=GREY)),
             range=[-0.3, 10.3], tickvals=list(range(11)), dtick=1,
             gridcolor=BORDER, tickfont=dict(color=GREY, size=10),
         ),

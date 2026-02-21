@@ -40,7 +40,7 @@ app.add_middleware(
 class PredictionRequest(BaseModel):
     ulcer_or_depression: bool = False
     no_lift_sign: bool = False
-    prior_resection: bool = False
+    prior_intervention: bool = False
     lesion_size_ge_40: bool = False
     high_grade_dysplasia: bool = False
     incomplete_removal: bool = False
@@ -72,7 +72,7 @@ def predict(req: PredictionRequest) -> PredictionResponse:
     result = compute_score(
         ulcer_or_depression=req.ulcer_or_depression,
         no_lift_sign=req.no_lift_sign,
-        prior_resection=req.prior_resection,
+        prior_intervention=req.prior_intervention,
         lesion_size_ge_40=req.lesion_size_ge_40,
         high_grade_dysplasia=req.high_grade_dysplasia,
         incomplete_removal=req.incomplete_removal,

@@ -4,12 +4,12 @@ CELS-OR Prediction Score — Scoring Engine
 Deterministic point-based scoring with effect modification logic.
 
 Interaction rule:
-    Previous resection does NOT contribute points independently.
+    Prior intervention does NOT contribute points independently.
     Instead, it attenuates the weight of the no-lift sign:
-        - No-lift sign WITHOUT prior resection -> 3 points
-        - No-lift sign WITH prior resection    -> 1 point
+        - No-lift sign WITHOUT prior intervention -> 3 points
+        - No-lift sign WITH prior intervention    -> 1 point
 
-    If no_lift_sign is False, prior_resection has no scoring effect.
+    If no_lift_sign is False, prior_intervention has no scoring effect.
 """
 
 from __future__ import annotations
@@ -49,7 +49,7 @@ class ScoreResult:
 def compute_score(
     ulcer_or_depression: bool = False,
     no_lift_sign: bool = False,
-    prior_resection: bool = False,
+    prior_intervention: bool = False,
     lesion_size_ge_40: bool = False,
     high_grade_dysplasia: bool = False,
     incomplete_removal: bool = False,
@@ -58,7 +58,7 @@ def compute_score(
     components: list[ScoreComponent] = []
     total = 0
 
-    # --- Ulceration / depression -> 3 pts ---
+    # --- Ulceration / depression / Paris 2c-3 -> 3 pts ---
     pts = 3 if ulcer_or_depression else 0
     components.append(ScoreComponent(
         predictor_key="ulcer_or_depression",
@@ -69,16 +69,16 @@ def compute_score(
     total += pts
 
     # --- No-lift sign with interaction modifier ---
-    interaction_active = no_lift_sign and prior_resection
+    interaction_active = no_lift_sign and prior_intervention
     if no_lift_sign:
-        nls_pts = NO_LIFT_POINTS_WITH_PRIOR if prior_resection else NO_LIFT_POINTS_WITHOUT_PRIOR
+        nls_pts = NO_LIFT_POINTS_WITH_PRIOR if prior_intervention else NO_LIFT_POINTS_WITHOUT_PRIOR
     else:
         nls_pts = 0
 
     nls_note = ""
     if interaction_active:
         nls_note = (
-            "Prior resection attenuates no-lift sign weight "
+            "Prior intervention attenuates no-lift sign weight "
             f"(3 \u2192 {NO_LIFT_POINTS_WITH_PRIOR} pt)"
         )
 
@@ -91,17 +91,17 @@ def compute_score(
     ))
     total += nls_pts
 
-    # Prior resection: modifier only, zero independent points
+    # Prior intervention: modifier only, zero independent points
     prior_note = ""
-    if prior_resection:
+    if prior_intervention:
         if no_lift_sign:
             prior_note = "Effect modifier - attenuates no-lift sign from 3 to 1 pt"
         else:
             prior_note = "No scoring effect - no-lift sign is absent"
     components.append(ScoreComponent(
-        predictor_key="prior_resection",
-        label=PREDICTOR_MAP["prior_resection"].label,
-        active=prior_resection,
+        predictor_key="prior_intervention",
+        label=PREDICTOR_MAP["prior_intervention"].label,
+        active=prior_intervention,
         points=0,
         note=prior_note,
     ))
@@ -126,7 +126,7 @@ def compute_score(
     ))
     total += pts
 
-    # --- Incomplete removal -> 1 pt ---
+    # --- Incomplete endoluminal resection -> 1 pt ---
     pts = 1 if incomplete_removal else 0
     components.append(ScoreComponent(
         predictor_key="incomplete_removal",
@@ -143,10 +143,10 @@ def compute_score(
     interaction_explanation = ""
     if interaction_active:
         interaction_explanation = (
-            "Effect modification: Prior endoscopic resection attenuates "
+            "Effect modification: Prior intervention attenuates "
             "the predictive weight of the no-lift sign from 3 to 1 point. "
             "This reflects reduced specificity of the no-lift sign in a previously "
-            "resected submucosal plane, where fibrosis from prior intervention "
+            "treated submucosal plane, where fibrosis from prior intervention "
             "may mimic invasive pathology."
         )
 

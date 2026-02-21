@@ -30,13 +30,12 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------------------------------
-# CSS — pure white, black text, no dark elements
+# CSS
 # ---------------------------------------------------------------------------
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-/* Force white everywhere */
 html, body,
 .main, .main .block-container,
 [data-testid="stAppViewContainer"],
@@ -61,7 +60,6 @@ section[data-testid="stSidebar"] {
     padding-top: 0.8rem;
 }
 
-/* Typography base — exclude icon fonts used by Streamlit */
 *:not([class*="icon"]):not([data-testid="stIconMaterial"]):not([class*="material"]):not(i) {
     font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
@@ -71,16 +69,13 @@ section[data-testid="stSidebar"] {
     font-family: 'Material Symbols Rounded', 'Material Icons' !important;
 }
 
-/* Reset Streamlit dark mode text */
 h1, h2, h3, h4, h5, h6 { color: #000000 !important; }
 p, li, span, label, td, th { color: #000000 !important; }
-div:not(.disclaimer-box):not(.sh):not(.rb):not(.co):not(.co-warn):not(.explain-card):not(.hint) {
+div:not(.disclaimer-box):not(.sh):not(.rb):not(.co):not(.co-warn):not(.explain-card):not(.hint):not(.algo-box) {
     color: #000000;
 }
 
 hr { border: none !important; border-top: 1px solid #E5E5E5 !important; }
-
-/* ---- Custom classes ---- */
 
 .app-title {
     text-align: center;
@@ -94,7 +89,7 @@ hr { border: none !important; border-top: 1px solid #E5E5E5 !important; }
 
 .app-subtitle {
     text-align: center;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     font-weight: 400;
     color: #444444 !important;
     margin: 2px 0 10px 0;
@@ -155,7 +150,6 @@ hr { border: none !important; border-top: 1px solid #E5E5E5 !important; }
     color: #000000 !important;
 }
 
-/* Component table */
 .ct { width: 100%; border-collapse: collapse; font-size: 0.84rem; background: #ffffff !important; }
 .ct th {
     padding: 6px 8px; text-align: left; font-weight: 600;
@@ -171,7 +165,6 @@ hr { border: none !important; border-top: 1px solid #E5E5E5 !important; }
 .ct tr.off td { color: #cccccc !important; }
 .ct .note { font-size: 0.72rem; color: #444444 !important; }
 
-/* Explainability card */
 .explain-card {
     background: #ffffff !important;
     border: 1px solid #E5E5E5;
@@ -181,28 +174,15 @@ hr { border: none !important; border-top: 1px solid #E5E5E5 !important; }
     font-size: 0.88rem;
     color: #000000 !important;
 }
-.explain-card .ex-label {
-    font-weight: 600;
-    color: #000000 !important;
-}
-.explain-card .ex-pts {
-    font-weight: 600;
-    color: #000000 !important;
-}
-.explain-card .ex-note {
-    font-size: 0.8rem;
-    color: #444444 !important;
-    padding-left: 18px;
-}
+.explain-card .ex-label { font-weight: 600; color: #000000 !important; }
+.explain-card .ex-pts { font-weight: 600; color: #000000 !important; }
+.explain-card .ex-note { font-size: 0.8rem; color: #444444 !important; padding-left: 18px; }
 .explain-card .ex-total {
-    margin-top: 8px;
-    padding-top: 8px;
+    margin-top: 8px; padding-top: 8px;
     border-top: 1px solid #E5E5E5;
-    font-weight: 600;
-    color: #000000 !important;
+    font-weight: 600; color: #000000 !important;
 }
 
-/* Methods panel */
 .mp {
     border: 1px solid #E5E5E5;
     padding: 14px;
@@ -214,7 +194,17 @@ hr { border: none !important; border-top: 1px solid #E5E5E5 !important; }
 .mp strong { color: #000000 !important; }
 .mp td, .mp th { color: #000000 !important; }
 
-/* Hints in sidebar */
+.algo-box {
+    border: 1px solid #E5E5E5;
+    padding: 12px 14px;
+    font-size: 0.84rem;
+    line-height: 1.7;
+    color: #000000 !important;
+    background: #ffffff !important;
+    margin-top: 8px;
+}
+.algo-box strong { color: #000000 !important; }
+
 .hint {
     font-size: 0.76rem;
     padding-left: 2px;
@@ -226,13 +216,17 @@ hr { border: none !important; border-top: 1px solid #E5E5E5 !important; }
 """, unsafe_allow_html=True)
 
 # ---------------------------------------------------------------------------
-# Title + single disclaimer
+# Title + disclaimer
 # ---------------------------------------------------------------------------
-st.markdown('<h1 class="app-title">CELS-OR Prediction Score</h1>', unsafe_allow_html=True)
+st.markdown(
+    '<h1 class="app-title">OR Conversion Score</h1>',
+    unsafe_allow_html=True,
+)
 st.markdown(
     '<p class="app-subtitle">'
     'Digital Nomogram - Intraoperative Decision Support for Completion of '
-    'CELS vs Conversion to Oncologic Resection</p>',
+    'CELS (combined endoscopic-laparoscopic surgery) vs Conversion to '
+    'OR (oncologic resection)</p>',
     unsafe_allow_html=True,
 )
 st.markdown(
@@ -251,24 +245,24 @@ with st.sidebar:
     st.markdown("---")
 
     ulcer_or_depression = st.checkbox(
-        "Ulceration or Depression (+3 pts)",
+        "Ulceration or Depression / Paris 2c-3 (+3 pts)",
         help=PREDICTOR_MAP["ulcer_or_depression"].description,
     )
 
     no_lift_sign = st.checkbox(
-        "No-lift Sign (+3 pts, or +1 with prior resection)",
+        "No-lift Sign (+3 pts, or +1 with prior intervention)",
         help=PREDICTOR_MAP["no_lift_sign"].description,
     )
 
-    prior_resection = st.checkbox(
-        "Prior Resection (effect modifier)",
+    prior_intervention = st.checkbox(
+        "Prior Intervention / Visible Scar / Regrowth Tumor (effect modifier)",
         disabled=not no_lift_sign,
-        help=PREDICTOR_MAP["prior_resection"].description,
+        help=PREDICTOR_MAP["prior_intervention"].description,
     )
 
     if not no_lift_sign:
         st.markdown('<p class="hint hint-off">Enable no-lift sign to activate this modifier.</p>', unsafe_allow_html=True)
-    elif prior_resection:
+    elif prior_intervention:
         st.markdown('<p class="hint hint-on">Effect modifier active: no-lift sign weight reduced 3 &rarr; 1 pt.</p>', unsafe_allow_html=True)
 
     st.markdown("---")
@@ -282,12 +276,12 @@ with st.sidebar:
         help=PREDICTOR_MAP["high_grade_dysplasia"].description,
     )
     incomplete_removal = st.checkbox(
-        "Incomplete Endoscopic Removal (+1 pt)",
+        "Incomplete Endoluminal Resection (+1 pt)",
         help=PREDICTOR_MAP["incomplete_removal"].description,
     )
 
 if not no_lift_sign:
-    prior_resection = False
+    prior_intervention = False
 
 # ---------------------------------------------------------------------------
 # Compute
@@ -295,7 +289,7 @@ if not no_lift_sign:
 result = compute_score(
     ulcer_or_depression=ulcer_or_depression,
     no_lift_sign=no_lift_sign,
-    prior_resection=prior_resection,
+    prior_intervention=prior_intervention,
     lesion_size_ge_40=lesion_size_ge_40,
     high_grade_dysplasia=high_grade_dysplasia,
     incomplete_removal=incomplete_removal,
@@ -382,7 +376,7 @@ with col_right:
         st.markdown('<div class="sh">Interaction effect</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="co-warn">{result.interaction_explanation}</div>', unsafe_allow_html=True)
 
-    # ---- Explainability as white card with HTML ----
+    # ---- Explainability ----
     st.markdown("---")
     st.markdown('<div class="sh">Explainability</div>', unsafe_allow_html=True)
 
@@ -417,7 +411,40 @@ with col_right:
         )
 
 # ---------------------------------------------------------------------------
-# Method and Model Derivation (static, no accordion)
+# Risk Stratification Algorithm
+# ---------------------------------------------------------------------------
+st.markdown("---")
+
+st.markdown(
+    '<h3 style="font-size:1.05rem;font-weight:700;color:#000000 !important;margin-bottom:10px;">'
+    'Score-Based Decision Algorithm</h3>',
+    unsafe_allow_html=True,
+)
+
+st.markdown("""
+<div class="algo-box">
+
+<strong>Low Risk (Score 0-3)</strong><br>
+&bull; If endoluminal resection is complete &rarr; Finish CELS<br>
+&bull; If endoluminal resection is not complete &rarr; FLEX / wedge resection (site dependent)
+
+<br><br>
+
+<strong>Intermediate Risk (Score 4-6)</strong><br>
+&bull; If endoluminal resection or FLEX / wedge is feasible &rarr; Proceed, then frozen section<br>
+&bull; If not feasible &rarr; Convert to OR
+
+<br><br>
+
+<strong>High Risk (Score 7-10)</strong><br>
+&bull; If endoluminal resection is feasible &rarr; Proceed, then frozen section<br>
+&bull; If not feasible &rarr; Convert to OR
+
+</div>
+""", unsafe_allow_html=True)
+
+# ---------------------------------------------------------------------------
+# Method and Model Derivation
 # ---------------------------------------------------------------------------
 st.markdown("---")
 
@@ -445,27 +472,44 @@ bias and separation in maximum likelihood estimation.
 
 | Predictor | Points |
 |---|---|
-| Ulceration or depression | 3 |
-| No-lift sign (no prior resection) | 3 |
-| No-lift sign (with prior resection) | 1 |
+| Ulceration or depression / Paris 2c-3 | 3 |
+| No-lift sign (no prior intervention) | 3 |
+| No-lift sign (with prior intervention) | 1 |
 | Lesion size &ge; 40 mm | 2 |
 | High-grade dysplasia | 1 |
-| Incomplete endoscopic removal | 1 |
+| Incomplete endoluminal resection | 1 |
 
 **Effect Modification**
 
-Previous endoscopic resection does not contribute points independently. Instead, it
-modifies the weight of the no-lift sign, reducing it from 3 to 1 point. This interaction
-reflects the reduced specificity of the no-lift sign in a previously resected submucosal
+Prior intervention does not contribute points independently. Instead, it modifies
+the weight of the no-lift sign, reducing it from 3 to 1 point. This interaction
+reflects the reduced specificity of the no-lift sign in a previously treated submucosal
 plane, where fibrosis from prior intervention may mimic invasive pathology.
 
 **Risk Stratification**
 
-- **Low (0-3):** Consider completing CELS
-- **Intermediate (4-6):** Individualized decision - consider frozen section
-- **High (7-10):** Favor conversion to oncologic resection
+- **Low (0-3):** Complete endoluminal resection &rarr; finish CELS; if not complete &rarr; FLEX/wedge (site dependent)
+- **Intermediate (4-6):** If resection or FLEX/wedge feasible &rarr; frozen section; if not &rarr; convert to OR
+- **High (7-10):** If resection feasible &rarr; frozen section; if not &rarr; convert to OR
 
 **Maximum Score:** 10
+
+**Definitions**
+
+*Prior Intervention:* Any previous therapeutic colonoscopic resection attempt
+(ESD or EMR/snare), or the presence of scar, fibrosis, regrowth, or residual lesion
+at the same site. Diagnostic biopsy alone is not considered a prior intervention.
+
+*Endoluminal Resection:* A safe, en bloc excision of the lesion within the submucosal
+plane with visibly normal lateral and deep margins, performed with or without adjunctive
+laparoscopic mobilization or traction assistance.
+
+**Abbreviations**
+
+- **AO** = appendiceal orifice
+- **ICV** = ileocecal valve
+- **OR** = oncologic resection
+- **CELS** = combined endoscopic-laparoscopic surgery
 
 </div>
 """, unsafe_allow_html=True)

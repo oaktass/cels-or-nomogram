@@ -1,47 +1,43 @@
-# CELS-OR Prediction Score - Digital Nomogram
+# OR Conversion Score - Digital Nomogram
 
 > **FOR RESEARCH PURPOSES ONLY - NOT FOR CLINICAL DECISION MAKING**
 
-Interactive digital nomogram for the **CELS-OR Prediction Score**, an intraoperative
+Interactive digital nomogram for the **OR Conversion Score**, an intraoperative
 decision support tool for completion of Combined Endoscopic-Laparoscopic Surgery (CELS)
-versus conversion to oncologic resection.
-
-## Overview
-
-This application implements a point-based scoring system derived from a multivariable
-Firth penalized logistic regression model. It provides:
-
-- **Score computation** with automatic interaction-effect handling
-- **Calibrated probability** of OR conversion
-- **Risk stratification** (Low / Intermediate / High)
-- **Graphical nomogram** visualization
-- **Interpretable explanation** panel
+versus conversion to Oncologic Resection (OR).
 
 ## Scoring System
 
 | Predictor | Points |
 |---|---|
-| Ulceration or depression | 3 |
-| No-lift sign (no prior resection) | 3 |
-| No-lift sign (with prior resection) | 1 |
+| Ulceration or depression / Paris 2c-3 | 3 |
+| No-lift sign (no prior intervention) | 3 |
+| No-lift sign (with prior intervention) | 1 |
 | Lesion size >= 40 mm | 2 |
 | High-grade dysplasia | 1 |
-| Incomplete endoscopic removal | 1 |
+| Incomplete endoluminal resection | 1 |
 | **Maximum** | **10** |
 
 ### Effect Modification Rule
 
-Previous endoscopic resection does **not** contribute points independently. Instead, it
+Prior intervention does **not** contribute points independently. Instead, it
 modifies the weight of the no-lift sign from 3 points to 1 point. This reflects the
-reduced specificity of the no-lift sign in a previously resected submucosal plane.
+reduced specificity of the no-lift sign in a previously treated submucosal plane.
 
 ### Risk Stratification
 
-| Score Range | Risk Category | Recommendation |
+| Score Range | Risk Category | Algorithm |
 |---|---|---|
-| 0-3 | Low | Consider completing CELS |
-| 4-6 | Intermediate | Individualized decision - consider frozen section |
-| 7-10 | High | Favor conversion to oncologic resection |
+| 0-3 | Low | Complete endoluminal resection -> finish CELS; if not complete -> FLEX/wedge (site dependent) |
+| 4-6 | Intermediate | If resection or FLEX/wedge feasible -> frozen section; if not -> convert to OR |
+| 7-10 | High | If resection feasible -> frozen section; if not -> convert to OR |
+
+### Abbreviations
+
+- **AO** = appendiceal orifice
+- **ICV** = ileocecal valve
+- **OR** = oncologic resection
+- **CELS** = combined endoscopic-laparoscopic surgery
 
 ## Disclaimer
 

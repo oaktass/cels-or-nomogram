@@ -30,8 +30,8 @@ class Predictor:
 PREDICTORS: list[Predictor] = [
     Predictor(
         key="ulcer_or_depression",
-        label="Ulceration or Depression",
-        description="Mucosal ulceration or depression observed on endoscopic evaluation",
+        label="Ulceration or Depression / Paris 2c-3",
+        description="Mucosal ulceration or depression observed on endoscopic evaluation (Paris classification 2c or 3)",
         base_points=3,
     ),
     Predictor(
@@ -42,9 +42,14 @@ PREDICTORS: list[Predictor] = [
         is_interaction_target=True,
     ),
     Predictor(
-        key="prior_resection",
-        label="Prior Resection",
-        description="History of prior endoscopic resection at the lesion site (effect modifier for no-lift sign)",
+        key="prior_intervention",
+        label="Prior Intervention / Visible Scar / Regrowth Tumor",
+        description=(
+            "Prior intervention is defined as any previous therapeutic colonoscopic "
+            "resection attempt (ESD or EMR/snare), or the presence of scar, fibrosis, "
+            "regrowth, or residual lesion at the same site. Diagnostic biopsy alone is "
+            "not considered a prior intervention. Effect modifier for no-lift sign."
+        ),
         base_points=0,
         is_interaction_modifier=True,
     ),
@@ -62,8 +67,14 @@ PREDICTORS: list[Predictor] = [
     ),
     Predictor(
         key="incomplete_removal",
-        label="Incomplete Endoscopic Removal",
-        description="Endoscopic removal judged macroscopically incomplete",
+        label="Incomplete Endoluminal Resection",
+        description=(
+            "Endoluminal resection is defined as a safe, en bloc excision of the lesion "
+            "within the submucosal plane with visibly normal lateral and deep margins, "
+            "performed with or without adjunctive laparoscopic mobilization or traction "
+            "assistance. This predictor is positive when such resection is judged "
+            "macroscopically incomplete."
+        ),
         base_points=1,
     ),
 ]
