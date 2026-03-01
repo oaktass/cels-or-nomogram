@@ -1,5 +1,5 @@
 """
-OC Conversion Score — Digital Nomogram
+CELS-OC Conversion Score — Digital Nomogram
 
 Run:  streamlit run frontend/app.py
 """
@@ -23,7 +23,7 @@ from frontend.plots import (
 )
 
 st.set_page_config(
-    page_title="OC Conversion Score",
+    page_title="CELS-OC Conversion Score",
     page_icon="\u2022",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -231,7 +231,7 @@ hr { border: none !important; border-top: 1px solid #E5E5E5 !important; }
 # Title + disclaimer
 # ---------------------------------------------------------------------------
 st.markdown(
-    '<h1 class="app-title">OC Conversion Score</h1>',
+    '<h1 class="app-title">CELS-OC Conversion Score</h1>',
     unsafe_allow_html=True,
 )
 st.markdown(
@@ -257,25 +257,25 @@ with st.sidebar:
     st.markdown("---")
 
     ulcer_or_depression = st.checkbox(
-        "Ulceration or Depression / Paris 2c-3 (+3 pts)",
+        "Ulceration or Depression (+3 pts)",
         help=PREDICTOR_MAP["ulcer_or_depression"].description,
     )
 
     no_lift_sign = st.checkbox(
-        "No-lift Sign (+3 pts, or +1 with prior intervention)",
+        "Non-lift Sign (+3 pts, or +1 with prior intervention)",
         help=PREDICTOR_MAP["no_lift_sign"].description,
     )
 
     prior_intervention = st.checkbox(
-        "Prior Intervention / Visible Scar / Regrowth Tumor (effect modifier)",
+        "Prior Intervention / Scar /Regrowth Tumor (effect modifier)",
         disabled=not no_lift_sign,
         help=PREDICTOR_MAP["prior_intervention"].description,
     )
 
     if not no_lift_sign:
-        st.markdown('<p class="hint hint-off">Enable no-lift sign to activate this modifier.</p>', unsafe_allow_html=True)
+        st.markdown('<p class="hint hint-off">Enable non-lift sign to activate this modifier.</p>', unsafe_allow_html=True)
     elif prior_intervention:
-        st.markdown('<p class="hint hint-on">Effect modifier active: no-lift sign weight reduced 3 &rarr; 1 pt.</p>', unsafe_allow_html=True)
+        st.markdown('<p class="hint hint-on">Effect modifier active: non-lift sign weight reduced 3 &rarr; 1 pt.</p>', unsafe_allow_html=True)
 
     st.markdown("---")
 
@@ -436,21 +436,34 @@ st.markdown(
 st.markdown("""
 <div class="algo-box">
 
-<strong>Low Risk (Score 0-3)</strong><br>
-&bull; If endoluminal resection is complete &rarr; Finish CELS<br>
-&bull; If endoluminal resection is not complete &rarr; FLEX / wedge resection (site dependent)
+<strong>LOW RISK (0-3 Points)</strong><br>
+Complete with CELS<br><br>
+&bull; If safe endoscopic resection achievable<br>
+&nbsp;&nbsp;-- Finish<br>
+&bull; If not endoscopically achievable<br>
+&nbsp;&nbsp;-- FLEX / Wedge (full-thickness allowed)<br>
+&nbsp;&nbsp;-- Frozen section not required
 
 <br><br>
 
-<strong>Intermediate Risk (Score 4-6)</strong><br>
-&bull; If endoluminal resection or FLEX / wedge is feasible &rarr; Proceed, then frozen section<br>
-&bull; If not feasible &rarr; Convert to OC
+<strong>INTERMEDIATE RISK (4-6 Points)</strong><br>
+En Bloc Resection + Frozen Required<br><br>
+&bull; If safe en bloc endoscopic resection achievable<br>
+&nbsp;&nbsp;-- Frozen<br>
+&bull; If not endoscopically achievable<br>
+&nbsp;&nbsp;-- FLEX / Wedge + Frozen<br>
+&bull; If safe en bloc resection not achievable by any approach<br>
+&nbsp;&nbsp;-- OC
 
 <br><br>
 
-<strong>High Risk (Score 7-10)</strong><br>
-&bull; If endoluminal resection is feasible &rarr; Proceed, then frozen section<br>
-&bull; If not feasible &rarr; Convert to OC
+<strong>HIGH RISK (7-10 Points)</strong><br>
+Oncologic Priority<br><br>
+&bull; If safe en bloc endoscopic resection achievable<br>
+&nbsp;&nbsp;-- Frozen<br>
+&bull; If not endoscopically achievable<br>
+&nbsp;&nbsp;-- Direct OC<br>
+&bull; Do not attempt FLEX / Wedge
 
 </div>
 """, unsafe_allow_html=True)
@@ -484,9 +497,9 @@ bias and separation in maximum likelihood estimation.
 
 | Predictor | Points |
 |---|---|
-| Ulceration or depression / Paris 2c-3 | 3 |
-| No-lift sign (no prior intervention) | 3 |
-| No-lift sign (with prior intervention) | 1 |
+| Ulceration or depression | 3 |
+| Non-lift sign (no prior intervention) | 3 |
+| Non-lift sign (with prior intervention) | 1 |
 | Lesion size &ge; 40 mm | 2 |
 | High-grade dysplasia | 1 |
 | Incomplete endoluminal resection | 1 |
@@ -494,15 +507,15 @@ bias and separation in maximum likelihood estimation.
 **Effect Modification**
 
 Prior intervention does not contribute points independently. Instead, it modifies
-the weight of the no-lift sign, reducing it from 3 to 1 point. This interaction
-reflects the reduced specificity of the no-lift sign in a previously treated submucosal
+the weight of the non-lift sign, reducing it from 3 to 1 point. This interaction
+reflects the reduced specificity of the non-lift sign in a previously treated submucosal
 plane, where fibrosis from prior intervention may mimic invasive pathology.
 
 **Risk Stratification**
 
-- **Low (0-3):** Complete endoluminal resection &rarr; finish CELS; if not complete &rarr; FLEX/wedge (site dependent)
-- **Intermediate (4-6):** If resection or FLEX/wedge feasible &rarr; frozen section; if not &rarr; convert to OC
-- **High (7-10):** If resection feasible &rarr; frozen section; if not &rarr; convert to OC
+- **LOW RISK (0-3 Points):** Complete with CELS; if safe endoscopic resection achievable -> Finish; if not endoscopically achievable -> FLEX / Wedge (full-thickness allowed); frozen section not required
+- **INTERMEDIATE RISK (4-6 Points):** En Bloc Resection + Frozen Required; if safe en bloc endoscopic resection achievable -> Frozen; if not endoscopically achievable -> FLEX / Wedge + Frozen; if safe en bloc resection not achievable by any approach -> OC
+- **HIGH RISK (7-10 Points):** Oncologic Priority; if safe en bloc endoscopic resection achievable -> Frozen; if not endoscopically achievable -> Direct OC; do not attempt FLEX / Wedge
 
 **Maximum Score:** 10
 
@@ -522,6 +535,8 @@ laparoscopic mobilization or traction assistance.
 - **ICV** = ileocecal valve
 - **OC** = oncologic colectomy
 - **CELS** = combined endoscopic-laparoscopic surgery
+- **FLEX** = Full thickness endolaparoscopic excision
+- **CAL-WR** = Colonoscopy assisted laparoscopic Wedge Resection
 
 </div>
 """, unsafe_allow_html=True)

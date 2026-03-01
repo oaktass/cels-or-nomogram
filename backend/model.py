@@ -30,25 +30,25 @@ class Predictor:
 PREDICTORS: list[Predictor] = [
     Predictor(
         key="ulcer_or_depression",
-        label="Ulceration or Depression / Paris 2c-3",
-        description="Mucosal ulceration or depression observed on endoscopic evaluation (Paris classification 2c or 3)",
+        label="Ulceration or Depression",
+        description="Mucosal ulceration or depression observed on endoscopic evaluation",
         base_points=3,
     ),
     Predictor(
         key="no_lift_sign",
-        label="No-lift Sign",
+        label="Non-lift Sign",
         description="Failure of submucosal lift after saline injection",
         base_points=3,
         is_interaction_target=True,
     ),
     Predictor(
         key="prior_intervention",
-        label="Prior Intervention / Visible Scar / Regrowth Tumor",
+        label="Prior Intervention / Scar /Regrowth Tumor",
         description=(
             "Prior intervention is defined as any previous therapeutic colonoscopic "
             "resection attempt (ESD or EMR/snare), or the presence of scar, fibrosis, "
             "regrowth, or residual lesion at the same site. Diagnostic biopsy alone is "
-            "not considered a prior intervention. Effect modifier for no-lift sign."
+            "not considered a prior intervention. Effect modifier for non-lift sign."
         ),
         base_points=0,
         is_interaction_modifier=True,
