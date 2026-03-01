@@ -95,7 +95,7 @@ RISK_THRESHOLDS = {
 RISK_RECOMMENDATIONS = {
     "LOW": "Consider completing CELS",
     "INTERMEDIATE": "Individualized decision - consider frozen section analysis",
-    "HIGH": "Favor conversion to oncologic colectomy",
+    "HIGH": "Favor conversion to oncologic colectomy (OC)",
 }
 
 RISK_COLORS = {

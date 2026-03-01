@@ -75,6 +75,18 @@ div:not(.disclaimer-box):not(.sh):not(.rb):not(.co):not(.co-warn):not(.explain-c
     color: #000000;
 }
 
+/* Streamlit dark-theme hardening: force widget and markdown text visible */
+[data-testid="stMarkdownContainer"],
+[data-testid="stText"],
+[data-testid="stCaptionContainer"],
+[data-testid="stSidebar"] label,
+[data-testid="stSidebar"] p,
+[data-testid="stSidebar"] span,
+[data-baseweb="checkbox"] > label,
+[data-baseweb="checkbox"] span {
+    color: #000000 !important;
+}
+
 hr { border: none !important; border-top: 1px solid #E5E5E5 !important; }
 
 .app-title {
