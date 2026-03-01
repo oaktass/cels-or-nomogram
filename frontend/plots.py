@@ -1,5 +1,5 @@
 """
-CELS-OR Prediction Score — Visualization Utilities
+OC Conversion Score — Visualization Utilities
 
 Minimal clinical visualizations using Plotly.
 Pure white backgrounds, black text, light grey borders.
@@ -28,7 +28,7 @@ def create_score_gauge(total_score: int, max_score: int, risk_category: str) -> 
         mode="gauge+number",
         value=total_score,
         number={"font": {"size": 44, "color": BLACK, "family": FONT}},
-        title={"text": "OR Conversion Score", "font": {"size": 13, "color": GREY, "family": FONT}},
+        title={"text": "OC Conversion Score", "font": {"size": 13, "color": GREY, "family": FONT}},
         gauge={
             "axis": {
                 "range": [0, max_score],
@@ -128,7 +128,7 @@ def create_nomogram_axis(total_score: int, probability: float, risk_category: st
         line=dict(color=BLACK, width=1.5),
         marker=dict(size=4, color=BLACK),
         name="Predicted probability",
-        hovertemplate="Score %{x}<br>P(OR) = %{y:.1f}%<extra></extra>",
+        hovertemplate="Score %{x}<br>P(OC) = %{y:.1f}%<extra></extra>",
     ))
 
     fig.add_trace(go.Scatter(
@@ -152,12 +152,12 @@ def create_nomogram_axis(total_score: int, probability: float, risk_category: st
     fig.update_layout(
         height=300, margin=dict(t=25, b=45, l=50, r=15),
         xaxis=dict(
-            title=dict(text="OR Conversion Score", font=dict(size=11, color=GREY)),
+            title=dict(text="OC Conversion Score", font=dict(size=11, color=GREY)),
             range=[-0.3, 10.3], tickvals=list(range(11)), dtick=1,
             gridcolor=BORDER, tickfont=dict(color=GREY, size=10),
         ),
         yaxis=dict(
-            title=dict(text="P(OR Conversion) %", font=dict(size=11, color=GREY)),
+            title=dict(text="P(OC Conversion) %", font=dict(size=11, color=GREY)),
             range=[-2, 105], tickvals=[0, 20, 40, 60, 80, 100],
             gridcolor=BORDER, tickfont=dict(color=GREY, size=10),
         ),

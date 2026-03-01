@@ -1,10 +1,10 @@
 """
-CELS-OR Prediction Score — Model Configuration
+OC Conversion Score — Model Configuration
 
 Defines predictor metadata, point allocations, and interaction logic
 for the Firth penalized logistic regression-derived scoring system.
 
-Reference: [Manuscript under review, Surgical Endoscopy]
+Reference: A Structured Conversion Score to Guide Oncologic Colectomy During Combined Endoscopic-Laparoscopic Surgery for Complex Colonic Polyps
 """
 
 from dataclasses import dataclass
@@ -95,7 +95,7 @@ RISK_THRESHOLDS = {
 RISK_RECOMMENDATIONS = {
     "LOW": "Consider completing CELS",
     "INTERMEDIATE": "Individualized decision - consider frozen section analysis",
-    "HIGH": "Favor conversion to oncologic resection",
+    "HIGH": "Favor conversion to oncologic colectomy",
 }
 
 RISK_COLORS = {

@@ -1,13 +1,13 @@
 """
-CELS-OR Prediction Score — Probability Calibration
+OC Conversion Score — Probability Calibration
 
 Monotonic logistic mapping from integer score (0–10) to predicted
-probability of OR conversion.
+probability of OC conversion.
 
 Parameters were estimated by fitting a logistic regression of the
 OR outcome on the integer CELS score in the derivation cohort (n=70).
 
-    P(OR conversion | score) = 1 / (1 + exp(-(α + β × score)))
+    P(OC conversion | score) = 1 / (1 + exp(-(α + β × score)))
 
     α (intercept)  = -3.8132
     β (coefficient) =  0.7584
@@ -25,7 +25,7 @@ CALIBRATION_SLOPE: float = 0.7584
 
 
 def score_to_probability(score: int) -> float:
-    """Map an integer CELS score to a calibrated probability of OR conversion."""
+    """Map an integer score to a calibrated probability of OC conversion."""
     if not 0 <= score <= 10:
         raise ValueError(f"Score must be 0–10, got {score}")
     logit = CALIBRATION_INTERCEPT + CALIBRATION_SLOPE * score

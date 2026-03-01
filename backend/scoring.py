@@ -1,5 +1,5 @@
 """
-CELS-OR Prediction Score — Scoring Engine
+OC Conversion Score — Scoring Engine
 
 Deterministic point-based scoring with effect modification logic.
 
@@ -54,7 +54,7 @@ def compute_score(
     high_grade_dysplasia: bool = False,
     incomplete_removal: bool = False,
 ) -> ScoreResult:
-    """Compute the CELS-OR prediction score from binary predictor inputs."""
+    """Compute the OC conversion score from binary predictor inputs."""
     components: list[ScoreComponent] = []
     total = 0
 

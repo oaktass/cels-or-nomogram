@@ -1,5 +1,5 @@
 """
-CELS-OR Prediction Score — Digital Nomogram
+OC Conversion Score — Digital Nomogram
 
 Run:  streamlit run frontend/app.py
 """
@@ -23,7 +23,7 @@ from frontend.plots import (
 )
 
 st.set_page_config(
-    page_title="CELS-OR Prediction Score",
+    page_title="OC Conversion Score",
     page_icon="\u2022",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -219,14 +219,14 @@ hr { border: none !important; border-top: 1px solid #E5E5E5 !important; }
 # Title + disclaimer
 # ---------------------------------------------------------------------------
 st.markdown(
-    '<h1 class="app-title">OR Conversion Score</h1>',
+    '<h1 class="app-title">OC Conversion Score</h1>',
     unsafe_allow_html=True,
 )
 st.markdown(
     '<p class="app-subtitle">'
     'Digital Nomogram - Intraoperative Decision Support for Completion of '
     'CELS (combined endoscopic-laparoscopic surgery) vs Conversion to '
-    'OR (oncologic resection)</p>',
+    'OC (oncologic colectomy)</p>',
     unsafe_allow_html=True,
 )
 st.markdown(
@@ -348,7 +348,7 @@ with col_center:
     )
 
 with col_right:
-    st.markdown('<div class="sh">Predicted probability of OR conversion</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sh">Predicted probability of OC conversion</div>', unsafe_allow_html=True)
 
     risk_color = RISK_COLORS[result.risk_category]
     st.markdown(
@@ -400,7 +400,7 @@ with col_right:
         explain_lines += (
             f'<div class="ex-total">'
             f'Total: {result.total_score} / {result.max_score} '
-            f'&rarr; P(OR conversion) = {pct:.1f}%</div>'
+            f'&rarr; P(OC conversion) = {pct:.1f}%</div>'
         )
         st.markdown(f'<div class="explain-card">{explain_lines}</div>', unsafe_allow_html=True)
     else:
@@ -432,13 +432,13 @@ st.markdown("""
 
 <strong>Intermediate Risk (Score 4-6)</strong><br>
 &bull; If endoluminal resection or FLEX / wedge is feasible &rarr; Proceed, then frozen section<br>
-&bull; If not feasible &rarr; Convert to OR
+&bull; If not feasible &rarr; Convert to OC
 
 <br><br>
 
 <strong>High Risk (Score 7-10)</strong><br>
 &bull; If endoluminal resection is feasible &rarr; Proceed, then frozen section<br>
-&bull; If not feasible &rarr; Convert to OR
+&bull; If not feasible &rarr; Convert to OC
 
 </div>
 """, unsafe_allow_html=True)
@@ -465,7 +465,7 @@ surgery (CELS) for complex colorectal lesions.
 **Model Derivation**
 
 A multivariable Firth penalized logistic regression was fit to predict intraoperative
-conversion to oncologic resection. Firth's method was selected to address small-sample
+conversion to oncologic colectomy. Firth's method was selected to address small-sample
 bias and separation in maximum likelihood estimation.
 
 **Selected Predictors (point-based scoring system)**
@@ -489,8 +489,8 @@ plane, where fibrosis from prior intervention may mimic invasive pathology.
 **Risk Stratification**
 
 - **Low (0-3):** Complete endoluminal resection &rarr; finish CELS; if not complete &rarr; FLEX/wedge (site dependent)
-- **Intermediate (4-6):** If resection or FLEX/wedge feasible &rarr; frozen section; if not &rarr; convert to OR
-- **High (7-10):** If resection feasible &rarr; frozen section; if not &rarr; convert to OR
+- **Intermediate (4-6):** If resection or FLEX/wedge feasible &rarr; frozen section; if not &rarr; convert to OC
+- **High (7-10):** If resection feasible &rarr; frozen section; if not &rarr; convert to OC
 
 **Maximum Score:** 10
 
@@ -508,7 +508,7 @@ laparoscopic mobilization or traction assistance.
 
 - **AO** = appendiceal orifice
 - **ICV** = ileocecal valve
-- **OR** = oncologic resection
+- **OC** = oncologic colectomy
 - **CELS** = combined endoscopic-laparoscopic surgery
 
 </div>

@@ -1,7 +1,7 @@
 """
-CELS-OR Prediction Score — FastAPI Backend
+OC Conversion Score — FastAPI Backend
 
-Provides a RESTful prediction endpoint for the CELS-OR scoring system.
+Provides a RESTful prediction endpoint for the OC conversion scoring system.
 """
 
 from __future__ import annotations
@@ -21,10 +21,10 @@ from .model import (
 from .scoring import compute_score
 
 app = FastAPI(
-    title="CELS-OR Prediction Score API",
+    title="OC Conversion Score API",
     description=(
         "Intraoperative decision support for completion of CELS vs "
-        "conversion to oncologic resection. " + RESEARCH_DISCLAIMER
+        "conversion to oncologic colectomy. " + RESEARCH_DISCLAIMER
     ),
     version=APP_VERSION,
 )

@@ -1,10 +1,10 @@
-# OR Conversion Score - Digital Nomogram
+# OC Conversion Score - Digital Nomogram
 
 > **FOR RESEARCH PURPOSES ONLY - NOT FOR CLINICAL DECISION MAKING**
 
-Interactive digital nomogram for the **OR Conversion Score**, an intraoperative
+Interactive digital nomogram for the **OC Conversion Score**, an intraoperative
 decision support tool for completion of Combined Endoscopic-Laparoscopic Surgery (CELS)
-versus conversion to Oncologic Resection (OR).
+versus conversion to Oncologic Colectomy (OC).
 
 ## Scoring System
 
@@ -29,14 +29,14 @@ reduced specificity of the no-lift sign in a previously treated submucosal plane
 | Score Range | Risk Category | Algorithm |
 |---|---|---|
 | 0-3 | Low | Complete endoluminal resection -> finish CELS; if not complete -> FLEX/wedge (site dependent) |
-| 4-6 | Intermediate | If resection or FLEX/wedge feasible -> frozen section; if not -> convert to OR |
-| 7-10 | High | If resection feasible -> frozen section; if not -> convert to OR |
+| 4-6 | Intermediate | If resection or FLEX/wedge feasible -> frozen section; if not -> convert to OC |
+| 7-10 | High | If resection feasible -> frozen section; if not -> convert to OC |
 
 ### Abbreviations
 
 - **AO** = appendiceal orifice
 - **ICV** = ileocecal valve
-- **OR** = oncologic resection
+- **OC** = oncologic colectomy
 - **CELS** = combined endoscopic-laparoscopic surgery
 
 ## Disclaimer
