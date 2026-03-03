@@ -11,24 +11,24 @@ versus conversion to Oncologic Colectomy (OC).
 | Predictor | Points |
 |---|---|
 | Ulceration or depression / Paris 2c-3 | 3 |
-| No-lift sign (no prior intervention) | 3 |
-| No-lift sign (with prior intervention) | 1 |
+| Non-lifting sign (no prior intervention) | 3 |
+| Non-lifting sign (with prior intervention) | 1 |
 | Lesion size >= 40 mm | 2 |
 | High-grade dysplasia | 1 |
-| Incomplete endoluminal resection | 1 |
+| Incomplete endoscopic resection | 1 |
 | **Maximum** | **10** |
 
 ### Effect Modification Rule
 
 Prior intervention does **not** contribute points independently. Instead, it
-modifies the weight of the no-lift sign from 3 points to 1 point. This reflects the
-reduced specificity of the no-lift sign in a previously treated submucosal plane.
+modifies the weight of the non-lifting sign from 3 points to 1 point. This reflects the
+reduced specificity of the non-lifting sign in a previously treated submucosal plane.
 
 ### Risk Stratification
 
 | Score Range | Risk Category | Algorithm |
 |---|---|---|
-| 0-3 | Low | Complete endoluminal resection -> finish CELS; if not complete -> FLEX/wedge (site dependent) |
+| 0-3 | Low | Complete endoscopic resection -> finish CELS; if not complete -> FLEX/wedge (site dependent) |
 | 4-6 | Intermediate | If resection or FLEX/wedge feasible -> frozen section; if not -> convert to OC |
 | 7-10 | High | If resection feasible -> frozen section; if not -> convert to OC |
 
