@@ -36,7 +36,7 @@ PREDICTORS: list[Predictor] = [
     ),
     Predictor(
         key="no_lift_sign",
-        label="Non-lift Sign",
+        label="Non-lifting Sign",
         description="Failure of submucosal lift after saline injection",
         base_points=3,
         is_interaction_target=True,
@@ -48,7 +48,7 @@ PREDICTORS: list[Predictor] = [
             "Prior intervention is defined as any previous therapeutic colonoscopic "
             "resection attempt (ESD or EMR/snare), or the presence of scar, fibrosis, "
             "regrowth, or residual lesion at the same site. Diagnostic biopsy alone is "
-            "not considered a prior intervention. Effect modifier for non-lift sign."
+            "not considered a prior intervention. Effect modifier for non-lifting sign."
         ),
         base_points=0,
         is_interaction_modifier=True,
@@ -67,9 +67,9 @@ PREDICTORS: list[Predictor] = [
     ),
     Predictor(
         key="incomplete_removal",
-        label="Incomplete Endoluminal Resection",
+        label="Incomplete Endoscopic Resection",
         description=(
-            "Endoluminal resection is defined as a safe, en bloc excision of the lesion "
+            "Endoscopic resection is defined as a safe, en bloc excision of the lesion "
             "within the submucosal plane with visibly normal lateral and deep margins, "
             "performed with or without adjunctive laparoscopic mobilization or traction "
             "assistance. This predictor is positive when such resection is judged "
@@ -93,9 +93,9 @@ RISK_THRESHOLDS = {
 }
 
 RISK_RECOMMENDATIONS = {
-    "LOW": "Consider completing CELS",
-    "INTERMEDIATE": "Individualized decision - consider frozen section analysis",
-    "HIGH": "Favor conversion to oncologic colectomy (OC)",
+    "LOW": "Complete with CELS when safe en bloc endoscopic resection is achievable",
+    "INTERMEDIATE": "En bloc resection with frozen section; convert to OC if not achievable",
+    "HIGH": "Oncologic priority - direct OC if not endoscopically achievable",
 }
 
 RISK_COLORS = {

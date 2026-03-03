@@ -5,9 +5,9 @@ Deterministic point-based scoring with effect modification logic.
 
 Interaction rule:
     Prior intervention does NOT contribute points independently.
-    Instead, it attenuates the weight of the non-lift sign:
-        - Non-lift sign WITHOUT prior intervention -> 3 points
-        - Non-lift sign WITH prior intervention    -> 1 point
+    Instead, it attenuates the weight of the non-lifting sign:
+        - Non-lifting sign WITHOUT prior intervention -> 3 points
+        - Non-lifting sign WITH prior intervention    -> 1 point
 
     If no_lift_sign is False, prior_intervention has no scoring effect.
 """
@@ -68,7 +68,7 @@ def compute_score(
     ))
     total += pts
 
-    # --- Non-lift sign with interaction modifier ---
+    # --- Non-lifting sign with interaction modifier ---
     interaction_active = no_lift_sign and prior_intervention
     if no_lift_sign:
         nls_pts = NO_LIFT_POINTS_WITH_PRIOR if prior_intervention else NO_LIFT_POINTS_WITHOUT_PRIOR
@@ -78,7 +78,7 @@ def compute_score(
     nls_note = ""
     if interaction_active:
         nls_note = (
-            "Prior intervention attenuates non-lift sign weight "
+            "Prior intervention attenuates non-lifting sign weight "
             f"(3 \u2192 {NO_LIFT_POINTS_WITH_PRIOR} pt)"
         )
 
@@ -95,9 +95,9 @@ def compute_score(
     prior_note = ""
     if prior_intervention:
         if no_lift_sign:
-            prior_note = "Effect modifier - attenuates non-lift sign from 3 to 1 pt"
+            prior_note = "Effect modifier - attenuates non-lifting sign from 3 to 1 pt"
         else:
-            prior_note = "No scoring effect - non-lift sign is absent"
+            prior_note = "No scoring effect - non-lifting sign is absent"
     components.append(ScoreComponent(
         predictor_key="prior_intervention",
         label=PREDICTOR_MAP["prior_intervention"].label,
@@ -126,7 +126,7 @@ def compute_score(
     ))
     total += pts
 
-    # --- Incomplete endoluminal resection -> 1 pt ---
+    # --- Incomplete endoscopic resection -> 1 pt ---
     pts = 1 if incomplete_removal else 0
     components.append(ScoreComponent(
         predictor_key="incomplete_removal",
@@ -144,8 +144,8 @@ def compute_score(
     if interaction_active:
         interaction_explanation = (
             "Effect modification: Prior intervention attenuates "
-            "the predictive weight of the non-lift sign from 3 to 1 point. "
-            "This reflects reduced specificity of the non-lift sign in a previously "
+            "the predictive weight of the non-lifting sign from 3 to 1 point. "
+            "This reflects reduced specificity of the non-lifting sign in a previously "
             "treated submucosal plane, where fibrosis from prior intervention "
             "may mimic invasive pathology."
         )

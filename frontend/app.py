@@ -262,7 +262,7 @@ with st.sidebar:
     )
 
     no_lift_sign = st.checkbox(
-        "Non-lift Sign (+3 pts, or +1 with prior intervention)",
+        "Non-lifting Sign (+3 pts, or +1 with prior intervention)",
         help=PREDICTOR_MAP["no_lift_sign"].description,
     )
 
@@ -273,9 +273,9 @@ with st.sidebar:
     )
 
     if not no_lift_sign:
-        st.markdown('<p class="hint hint-off">Enable non-lift sign to activate this modifier.</p>', unsafe_allow_html=True)
+        st.markdown('<p class="hint hint-off">Enable non-lifting sign to activate this modifier.</p>', unsafe_allow_html=True)
     elif prior_intervention:
-        st.markdown('<p class="hint hint-on">Effect modifier active: non-lift sign weight reduced 3 &rarr; 1 pt.</p>', unsafe_allow_html=True)
+        st.markdown('<p class="hint hint-on">Effect modifier active: non-lifting sign weight reduced 3 &rarr; 1 pt.</p>', unsafe_allow_html=True)
 
     st.markdown("---")
 
@@ -288,7 +288,7 @@ with st.sidebar:
         help=PREDICTOR_MAP["high_grade_dysplasia"].description,
     )
     incomplete_removal = st.checkbox(
-        "Incomplete Endoluminal Resection (+1 pt)",
+        "Incomplete Endoscopic Resection (+1 pt)",
         help=PREDICTOR_MAP["incomplete_removal"].description,
     )
 
@@ -308,6 +308,27 @@ result = compute_score(
 )
 probability = score_to_probability(result.total_score)
 pct = probability * 100
+
+RECOMMENDATION_BY_RISK = {
+    "LOW": (
+        "Complete with CELS<br><br>"
+        "&bull; If safe en bloc endoscopic resection achievable &rarr; Finish<br>"
+        "&bull; If not endoscopically achievable &rarr; FLEX / CAL-WR (full-thickness)<br>"
+        "&bull; Frozen section not required"
+    ),
+    "INTERMEDIATE": (
+        "En Bloc Resection + Frozen Required<br><br>"
+        "&bull; If safe en bloc endoscopic resection achievable &rarr; Frozen<br>"
+        "&bull; If not endoscopically achievable &rarr; FLEX / CAL-WR + Frozen<br>"
+        "&bull; If safe en bloc resection not achievable by any approach &rarr; OC"
+    ),
+    "HIGH": (
+        "Oncologic Priority<br><br>"
+        "&bull; If safe en bloc endoscopic resection achievable &rarr; Frozen<br>"
+        "&bull; If not endoscopically achievable &rarr; Direct OC<br>"
+        "&bull; Do not attempt FLEX / CAL-WR"
+    ),
+}
 
 # ---------------------------------------------------------------------------
 # Layout
@@ -382,7 +403,7 @@ with col_right:
     )
 
     st.markdown('<div class="sh">Recommendation</div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="co">{result.recommendation}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="co">{RECOMMENDATION_BY_RISK[result.risk_category]}</div>', unsafe_allow_html=True)
 
     if result.interaction_explanation:
         st.markdown('<div class="sh">Interaction effect</div>', unsafe_allow_html=True)
@@ -441,7 +462,7 @@ Complete with CELS<br><br>
 &bull; If safe endoscopic resection achievable<br>
 &nbsp;&nbsp;-- Finish<br>
 &bull; If not endoscopically achievable<br>
-&nbsp;&nbsp;-- FLEX / Wedge (full-thickness allowed)<br>
+&nbsp;&nbsp;-- FLEX / CAL-WR (full-thickness)<br>
 &nbsp;&nbsp;-- Frozen section not required
 
 <br><br>
@@ -451,7 +472,7 @@ En Bloc Resection + Frozen Required<br><br>
 &bull; If safe en bloc endoscopic resection achievable<br>
 &nbsp;&nbsp;-- Frozen<br>
 &bull; If not endoscopically achievable<br>
-&nbsp;&nbsp;-- FLEX / Wedge + Frozen<br>
+&nbsp;&nbsp;-- FLEX / CAL-WR + Frozen<br>
 &bull; If safe en bloc resection not achievable by any approach<br>
 &nbsp;&nbsp;-- OC
 
@@ -463,7 +484,7 @@ Oncologic Priority<br><br>
 &nbsp;&nbsp;-- Frozen<br>
 &bull; If not endoscopically achievable<br>
 &nbsp;&nbsp;-- Direct OC<br>
-&bull; Do not attempt FLEX / Wedge
+&bull; Do not attempt FLEX / CAL-WR
 
 </div>
 """, unsafe_allow_html=True)
@@ -498,24 +519,24 @@ bias and separation in maximum likelihood estimation.
 | Predictor | Points |
 |---|---|
 | Ulceration or depression | 3 |
-| Non-lift sign (no prior intervention) | 3 |
-| Non-lift sign (with prior intervention) | 1 |
+| Non-lifting sign (no prior intervention) | 3 |
+| Non-lifting sign (with prior intervention) | 1 |
 | Lesion size &ge; 40 mm | 2 |
 | High-grade dysplasia | 1 |
-| Incomplete endoluminal resection | 1 |
+| Incomplete endoscopic resection | 1 |
 
 **Effect Modification**
 
 Prior intervention does not contribute points independently. Instead, it modifies
-the weight of the non-lift sign, reducing it from 3 to 1 point. This interaction
-reflects the reduced specificity of the non-lift sign in a previously treated submucosal
+the weight of the non-lifting sign, reducing it from 3 to 1 point. This interaction
+reflects the reduced specificity of the non-lifting sign in a previously treated submucosal
 plane, where fibrosis from prior intervention may mimic invasive pathology.
 
 **Risk Stratification**
 
-- **LOW RISK (0-3 Points):** Complete with CELS; if safe endoscopic resection achievable -> Finish; if not endoscopically achievable -> FLEX / Wedge (full-thickness allowed); frozen section not required
-- **INTERMEDIATE RISK (4-6 Points):** En Bloc Resection + Frozen Required; if safe en bloc endoscopic resection achievable -> Frozen; if not endoscopically achievable -> FLEX / Wedge + Frozen; if safe en bloc resection not achievable by any approach -> OC
-- **HIGH RISK (7-10 Points):** Oncologic Priority; if safe en bloc endoscopic resection achievable -> Frozen; if not endoscopically achievable -> Direct OC; do not attempt FLEX / Wedge
+- **LOW RISK (0-3 Points):** Complete with CELS; if safe en bloc endoscopic resection achievable -> Finish; if not endoscopically achievable -> FLEX / CAL-WR (full-thickness); frozen section not required
+- **INTERMEDIATE RISK (4-6 Points):** En Bloc Resection + Frozen Required; if safe en bloc endoscopic resection achievable -> Frozen; if not endoscopically achievable -> FLEX / CAL-WR + Frozen; if safe en bloc resection not achievable by any approach -> OC
+- **HIGH RISK (7-10 Points):** Oncologic Priority; if safe en bloc endoscopic resection achievable -> Frozen; if not endoscopically achievable -> Direct OC; do not attempt FLEX / CAL-WR
 
 **Maximum Score:** 10
 
@@ -525,7 +546,7 @@ plane, where fibrosis from prior intervention may mimic invasive pathology.
 (ESD or EMR/snare), or the presence of scar, fibrosis, regrowth, or residual lesion
 at the same site. Diagnostic biopsy alone is not considered a prior intervention.
 
-*Endoluminal Resection:* A safe, en bloc excision of the lesion within the submucosal
+*Endoscopic Resection:* A safe, en bloc excision of the lesion within the submucosal
 plane with visibly normal lateral and deep margins, performed with or without adjunctive
 laparoscopic mobilization or traction assistance.
 
