@@ -30,53 +30,107 @@ jobs:
           node <<'NODE'
           const { chromium } = require('playwright');
 
+          const url = 'https://cels-oc-conversionscore.streamlit.app/';
+          const titlePattern = /CELS-OC Conversion Score/i;
+          const sleepPattern = /gone to sleep|wake it up|get this app back up/i;
+
+          const getAppFrame = (page) =>
+            page.frames().find((frame) => /~\/\+\//.test(frame.url())) || null;
+
+          const getVisibleText = async (page) => {
+            const parts = [];
+
+            try {
+              parts.push(await page.locator('body').innerText({ timeout: 10000 }));
+            } catch (error) {
+              console.log('Could not read main page body text:', error.message);
+            }
+
+            const appFrame = getAppFrame(page);
+            if (appFrame) {
+              try {
+                parts.push(await appFrame.locator('body').innerText({ timeout: 10000 }));
+              } catch (error) {
+                console.log('Could not read app iframe body text:', error.message);
+              }
+            }
+
+            return parts.join('\n');
+          };
+
+          const waitForAppContent = async (page, timeoutMs = 180000) => {
+            const startedAt = Date.now();
+
+            while (Date.now() - startedAt < timeoutMs) {
+              const pageTitle = await page.title();
+              const visibleText = await getVisibleText(page);
+
+              if (titlePattern.test(pageTitle) || titlePattern.test(visibleText)) {
+                return { pageTitle, visibleText };
+              }
+
+              const elapsedSeconds = Math.round((Date.now() - startedAt) / 1000);
+              console.log(
+                `Waiting for app content (${elapsedSeconds}s): title="${pageTitle}", appFrame=${Boolean(getAppFrame(page))}`
+              );
+              await page.waitForTimeout(3000);
+            }
+
+            throw new Error('Timed out waiting for Streamlit app content.');
+          };
+
           (async () => {
-            const url = 'https://cels-oc-conversionscore.streamlit.app/';
             const browser = await chromium.launch({ headless: true });
             const page = await browser.newPage();
 
-            console.log(`Opening ${url}`);
-            await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 });
-
-            let bodyText = '';
             try {
-              bodyText = await page.locator('body').innerText({ timeout: 30000 });
-            } catch (e) {
-              console.log('Could not read initial body text:', e.message);
-            }
+              console.log(`Opening ${url}`);
+              await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 });
 
-            if (/gone to sleep|wake it up|get this app back up/i.test(bodyText)) {
-              console.log('App appears to be asleep. Attempting to wake it.');
-
-              const wakeButton = page.getByRole('button', {
-                name: /yes|get this app back up|wake/i
-              });
-
-              if (await wakeButton.count()) {
-                await wakeButton.first().click();
-                console.log('Wake button clicked. Waiting for app to restart.');
-                await page.waitForTimeout(90000);
-              } else {
-                console.log('Sleep text detected, but no wake button found.');
+              let bodyText = '';
+              try {
+                bodyText = await page.locator('body').innerText({ timeout: 30000 });
+              } catch (error) {
+                console.log('Could not read initial body text:', error.message);
               }
-            } else {
-              console.log('App does not appear to be asleep.');
+
+              if (sleepPattern.test(bodyText)) {
+                console.log('App appears to be asleep. Attempting to wake it.');
+
+                const wakeButton = page.getByRole('button', {
+                  name: /yes|get this app back up|wake/i,
+                });
+
+                if (await wakeButton.count()) {
+                  await wakeButton.first().click();
+                  console.log('Wake button clicked. Waiting for app to restart.');
+                  await page.waitForTimeout(90000);
+                } else {
+                  console.log('Sleep text detected, but no wake button found.');
+                }
+
+                console.log('Rechecking app after wake attempt.');
+                await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 });
+              } else {
+                console.log('App does not appear to be asleep on the landing page.');
+              }
+
+              const { pageTitle, visibleText } = await waitForAppContent(page);
+
+              if (!titlePattern.test(pageTitle) && !titlePattern.test(visibleText)) {
+                console.error('Expected app title was not found.');
+                console.error('Page title:', pageTitle);
+                console.error(visibleText.slice(0, 1500));
+                throw new Error('Streamlit app did not load expected content.');
+              }
+
+              console.log('Success: Streamlit app loaded and expected title was found.');
+              console.log(`Page title: ${pageTitle}`);
+            } finally {
+              await browser.close();
             }
-
-            console.log('Rechecking app.');
-            await page.goto(url, { waitUntil: 'networkidle', timeout: 120000 }).catch(async (e) => {
-              console.log('networkidle timed out, continuing with DOM check:', e.message);
-            });
-
-            const finalText = await page.locator('body').innerText({ timeout: 30000 });
-
-            if (!/CELS-OC Conversion Score/i.test(finalText)) {
-              console.error('Expected app title was not found.');
-              console.error(finalText.slice(0, 1500));
-              throw new Error('Streamlit app did not load expected content.');
-            }
-
-            console.log('Success: Streamlit app loaded and expected title was found.');
-            await browser.close();
-          })();
+          })().catch((error) => {
+            console.error(error);
+            process.exit(1);
+          });
           NODE
