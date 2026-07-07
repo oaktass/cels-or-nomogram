@@ -39,6 +39,12 @@ reduced specificity of the non-lifting sign in a previously treated submucosal p
 - **OC** = oncologic colectomy
 - **CELS** = combined endoscopic-laparoscopic surgery
 
+## Availability
+
+The app is hosted at [https://cels-oc-conversionscore.streamlit.app/](https://cels-oc-conversionscore.streamlit.app/).
+
+A scheduled GitHub Action (`.github/workflows/keep-streamlit-awake.yml`) visits the app every 6 hours to wake it if Streamlit has put it to sleep due to inactivity, and verifies that the main page loads. This workflow does not change the app's content, UI, or scoring logic—it only improves reviewer access by reducing inactivity-related sleep issues.
+
 ## Disclaimer
 
 This tool is derived from a peer-reviewed research study and is provided

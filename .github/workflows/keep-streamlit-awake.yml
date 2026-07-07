@@ -1,0 +1,82 @@
+name: Keep Streamlit App Awake
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  wake-and-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Playwright
+        run: |
+          npm init -y
+          npm i playwright
+          npx playwright install chromium --with-deps
+
+      - name: Open app, wake if needed, and verify title
+        run: |
+          node <<'NODE'
+          const { chromium } = require('playwright');
+
+          (async () => {
+            const url = 'https://cels-oc-conversionscore.streamlit.app/';
+            const browser = await chromium.launch({ headless: true });
+            const page = await browser.newPage();
+
+            console.log(`Opening ${url}`);
+            await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 });
+
+            let bodyText = '';
+            try {
+              bodyText = await page.locator('body').innerText({ timeout: 30000 });
+            } catch (e) {
+              console.log('Could not read initial body text:', e.message);
+            }
+
+            if (/gone to sleep|wake it up|get this app back up/i.test(bodyText)) {
+              console.log('App appears to be asleep. Attempting to wake it.');
+
+              const wakeButton = page.getByRole('button', {
+                name: /yes|get this app back up|wake/i
+              });
+
+              if (await wakeButton.count()) {
+                await wakeButton.first().click();
+                console.log('Wake button clicked. Waiting for app to restart.');
+                await page.waitForTimeout(90000);
+              } else {
+                console.log('Sleep text detected, but no wake button found.');
+              }
+            } else {
+              console.log('App does not appear to be asleep.');
+            }
+
+            console.log('Rechecking app.');
+            await page.goto(url, { waitUntil: 'networkidle', timeout: 120000 }).catch(async (e) => {
+              console.log('networkidle timed out, continuing with DOM check:', e.message);
+            });
+
+            const finalText = await page.locator('body').innerText({ timeout: 30000 });
+
+            if (!/CELS-OC Conversion Score/i.test(finalText)) {
+              console.error('Expected app title was not found.');
+              console.error(finalText.slice(0, 1500));
+              throw new Error('Streamlit app did not load expected content.');
+            }
+
+            console.log('Success: Streamlit app loaded and expected title was found.');
+            await browser.close();
+          })();
+          NODE
